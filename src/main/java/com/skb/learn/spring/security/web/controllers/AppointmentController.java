@@ -2,7 +2,10 @@ package com.skb.learn.spring.security.web.controllers;
 
 import java.util.List;
 
+import com.skb.learn.spring.security.domain.repositories.AutoUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,9 +23,15 @@ import com.skb.learn.spring.security.domain.repositories.AppointmentRepository;
 @RequestMapping("/appointments")
 public class AppointmentController {
 
-	@Autowired
 	private AppointmentRepository appointmentRepository;
-	
+
+	private AutoUserRepository autoUserRepository;
+
+	public AppointmentController(AppointmentRepository appointmentRepository, AutoUserRepository autoUserRepository) {
+		this.appointmentRepository = appointmentRepository;
+		this.autoUserRepository = autoUserRepository;
+	}
+
 	@ModelAttribute
 	public Appointment getAppointment(){
 		return new Appointment();
@@ -34,12 +43,10 @@ public class AppointmentController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value="/save", method=RequestMethod.POST)
+	@RequestMapping(value="/", method=RequestMethod.POST)
 	public List<Appointment> saveAppointment(@ModelAttribute Appointment appointment){
-		AutoUser user = new AutoUser();
-		user.setEmail("test@email.com");
-		user.setFirstName("Joe");
-		user.setLastName("Doe");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		AutoUser user = autoUserRepository.findByUsername(username);
 		appointment.setUser(user);
 		appointment.setStatus("Initial");
 		appointmentRepository.save(appointment);
