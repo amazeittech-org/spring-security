@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +23,7 @@ import com.skb.learn.spring.security.domain.repositories.AppointmentRepository;
 
 @Controller()
 @RequestMapping("/appointments")
+@Transactional
 public class AppointmentController {
 
 	private AppointmentRepository appointmentRepository;
