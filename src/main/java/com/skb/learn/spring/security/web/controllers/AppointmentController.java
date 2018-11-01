@@ -1,5 +1,6 @@
 package com.skb.learn.spring.security.web.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.skb.learn.spring.security.domain.repositories.AutoUserRepository;
@@ -48,18 +49,24 @@ public class AppointmentController {
 	@ResponseBody
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	public List<Appointment> saveAppointment(@ModelAttribute Appointment appointment){
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		AutoUser user = autoUserRepository.findByUsername(username);
+		AutoUser user = (AutoUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		// AutoUser user = this.autoUserRepository.findByUsername(username);
+		//Appointment newApt = new Appointment();
+
 		appointment.setUser(user);
 		appointment.setStatus("Initial");
 		appointmentRepository.save(appointment);
-		return this.appointmentRepository.findAll();
+		List<Appointment> appointments = new ArrayList<>();
+		this.appointmentRepository.findAll().forEach(apt -> appointments.add(apt));
+		return appointments;
 	}
 	
 	@ResponseBody
 	@RequestMapping("/all")
 	public List<Appointment> getAppointments(){
-		return this.appointmentRepository.findAll();
+		List<Appointment> appointments = new ArrayList<>();
+		this.appointmentRepository.findAll().forEach(apt -> appointments.add(apt));
+		return appointments;
 	}
 
 	@RequestMapping("/{appointmentId}")

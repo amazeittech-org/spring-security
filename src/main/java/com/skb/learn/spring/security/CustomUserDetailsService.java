@@ -23,8 +23,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AutoUser autoUser = autoUserRepository.findByUsername(username);
-
-        return new User(autoUser.getUsername(), autoUser.getPassword(),
-                AuthorityUtils.createAuthorityList(autoUser.getRole()));
+        return autoUser;
+       /* return new User(autoUser.getUsername(), autoUser.getPassword(),
+                AuthorityUtils.createAuthorityList(autoUser.getRole()));*/
     }
 }
