@@ -17,7 +17,8 @@
         <security:logout logout-url="/logout" logout-success-url="/login?logout=true" delete-cookies="JSESSIONID"/>
         <security:intercept-url pattern="/appointments/*" access="ROLE_USER,ROLE_ADMIN"/>
         <security:intercept-url pattern="/services/*" access="ROLE_ADMIN"/>
-        <security:intercept-url pattern="/**" access="ROLE_ANONYMOUS"/>
+        <security:intercept-url pattern="/schedule/*" access="ROLE_FOO"/>
+        <security:intercept-url pattern="/**" access="ROLE_ANONYMOUS, ROLE_USER"/>
     </security:http>
 
     <security:authentication-manager>
