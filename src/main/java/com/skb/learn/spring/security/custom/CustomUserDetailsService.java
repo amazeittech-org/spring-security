@@ -1,4 +1,4 @@
-package com.skb.learn.spring.security;
+package com.skb.learn.spring.security.custom;
 
 import com.skb.learn.spring.security.domain.entities.AutoUser;
 import com.skb.learn.spring.security.domain.repositories.AutoUserRepository;

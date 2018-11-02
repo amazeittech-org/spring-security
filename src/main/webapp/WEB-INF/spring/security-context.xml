@@ -21,6 +21,8 @@
         <security:intercept-url pattern="/**" access="ROLE_ANONYMOUS, ROLE_USER"/>
     </security:http>
 
+    <!--<bean id="customFormLoginFilter" class="" />-->
+
     <security:authentication-manager>
         <!--<security:authentication-provider user-service-ref="customUserDetailsService" />-->
         <security:authentication-provider ref="customAuthenticationProvider" />

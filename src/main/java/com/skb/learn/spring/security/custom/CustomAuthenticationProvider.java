@@ -1,4 +1,4 @@
-package com.skb.learn.spring.security;
+package com.skb.learn.spring.security.custom;
 
 import com.skb.learn.spring.security.domain.entities.AutoUser;
 import com.skb.learn.spring.security.domain.repositories.AutoUserRepository;
@@ -28,7 +28,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         // Because through our supports() below we know that the Authentication mechanism supported is
         // UsernamePasswordAuthenticationToken therefore we can perform the hard type-cast of the authentication
         // object
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
+        CustomAuthenticationToken token = (CustomAuthenticationToken) authentication;
 
         // Get the user details from the repository
         AutoUser user = autoUserRepository.findByUsername(token.getName());
@@ -37,12 +37,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if(user == null) {
             throw new BadCredentialsException("Invalid username supplied");
             // Ignoring case just to show that this CustomAuthenticationProvider is working
-        } else if (!user.getPassword().equalsIgnoreCase(token.getCredentials().toString())) {
+        } else if (!user.getPassword().equalsIgnoreCase(token.getCredentials().toString()) ||
+                token.getMake().equalsIgnoreCase("Subaru")) {
             throw new BadCredentialsException("Invalid password supplied");
         }
 
         // Hurray... Successfully authenticated!! Now we need to build an Authentication object
-        return new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
+        return new CustomAuthenticationToken(user, user.getPassword(), user.getAuthorities(), token.getMake());
     }
 
     // Accepts a parameter of type Class and this is going to be a authentication class that we will support for this
@@ -53,7 +54,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public boolean supports(Class<?> authentication) {
         //
-        return UsernamePasswordAuthenticationToken.class.equals(authentication);
+        return CustomAuthenticationToken.class.equals(authentication);
 
         //
     }
