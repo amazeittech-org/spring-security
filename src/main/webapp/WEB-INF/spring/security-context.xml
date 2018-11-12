@@ -22,7 +22,8 @@
     </security:http>
 
     <security:authentication-manager>
-        <security:authentication-provider user-service-ref="customUserDetailsService" />
+        <!--<security:authentication-provider user-service-ref="customUserDetailsService" />-->
+        <security:authentication-provider ref="customAuthenticationProvider" />
     </security:authentication-manager>
 
 </beans>
