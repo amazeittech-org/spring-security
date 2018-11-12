@@ -2,6 +2,8 @@ package com.skb.learn.spring.security;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.skb.learn.spring.security.domain.entities.Appointment;
 import com.skb.learn.spring.security.domain.entities.Automobile;
@@ -33,6 +35,7 @@ public class AutoUserTest {
 		autoUser.setLastName("Bowersox");
 		autoUser.setUsername("kmb385");
 		autoUser.setPassword("test");
+		autoUser.setRole("ROLE_USER");
 		
 		Appointment appointment = new Appointment();
 		appointment.setAppointmentDt(LocalDate.now());
@@ -46,6 +49,8 @@ public class AutoUserTest {
 		autoUser.getAppointments().add(appointment);
 
 		autoUserRepository.save(autoUser);
+
+
 	}
 
 
