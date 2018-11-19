@@ -5,6 +5,10 @@ import java.util.List;
 
 import com.skb.learn.spring.security.domain.repositories.AutoUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -34,6 +38,14 @@ public class AppointmentController {
 	public AppointmentController(AppointmentRepository appointmentRepository, AutoUserRepository autoUserRepository) {
 		this.appointmentRepository = appointmentRepository;
 		this.autoUserRepository = autoUserRepository;
+	}
+
+	// This approach is more useful than using access and url in the JSP authorize tags. By using this we now need to
+	// mention allowed Role or Authority just in this place, and not in JSP page
+	@ModelAttribute("isUser")
+	private boolean isUser(Authentication auth) {
+		return auth != null &&
+				auth.getAuthorities().contains(AuthorityUtils.createAuthorityList("ROLE_USER").get(0));
 	}
 
 	@ModelAttribute
@@ -75,5 +87,27 @@ public class AppointmentController {
 		model.addAttribute("appointment", appointment);
 		return "appointment";
 	}
-	
+
+	@ResponseBody
+	@RequestMapping("/confirm")
+	@PreAuthorize("hasRole('ROLE_ADMIN')") // Annotation provided by SS. And it requires that the user has a certain
+										  // role or permission prior to invoking this method. The value inside can be
+										 //  a SPEL expression.
+	public String confirm() {
+		return "Confirmed";
+	}
+
+	@ResponseBody
+	@RequestMapping("/cancel")
+	@PreAuthorize("hasRole('ROLE_ADMIN')") // This will ensure that only an Admin can call this API
+	public String cancel() {
+		return "Cancelled";
+	}
+
+	@ResponseBody
+	@RequestMapping("/complete")
+	public String complete() {
+		return "Completed";
+	}
+
 }
