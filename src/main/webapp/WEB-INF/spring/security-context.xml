@@ -10,15 +10,27 @@
     <bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
 
     <context:component-scan base-package="com.skb.learn.spring.security" />
-    <security:http auto-config="true" use-expressions="false">
+    <!-- With use-expression=true we can now user SPEL -->
+    <security:http auto-config="true" use-expressions="true">
         <!--<security:http-basic/>-->
-        <security:form-login login-page="/login" login-processing-url="/login" username-parameter="custom_username" password-parameter="custom_password"
-        default-target-url="/appointments/" always-use-default-target="true" authentication-failure-url="/login?error=true"/>
+        <security:form-login login-page="/login" login-processing-url="/login" username-parameter="custom_username"
+            password-parameter="custom_password" default-target-url="/appointments/" always-use-default-target="true"
+                             authentication-failure-url="/login?error=true"/>
         <security:logout logout-url="/logout" logout-success-url="/login?logout=true" delete-cookies="JSESSIONID"/>
-        <security:intercept-url pattern="/appointments/*" access="ROLE_USER,ROLE_ADMIN"/>
-        <security:intercept-url pattern="/services/*" access="ROLE_ADMIN"/>
-        <security:intercept-url pattern="/schedule/*" access="ROLE_FOO"/>
-        <security:intercept-url pattern="/**" access="ROLE_ANONYMOUS, ROLE_USER"/>
+        <!-- Since not we are using SPEL we can logical operators like or, and, etc -->
+        <security:intercept-url pattern="/appointments/*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')"/>
+        <!-- hasAuthority() is similar to hasRole(). Internally hasAuthority() delegates to hasRole() -->
+        <!-- We can also use SPEL like (though it is not recommended):
+            <security:intercept-url pattern="/schedule/*" access="principal.username == 'kbowersox'"/>
+        -->
+        <security:intercept-url pattern="/services/*" access="hasAuthority('ROLE_ADMIN')"/>
+        <security:intercept-url pattern="/schedule/*" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"/>
+        <!-- To avoid putting lot of hasRole + or combination we can use hasAnyRole() -->
+        <!-- In cases where we need to allow access to every one like home page, login page, contact us we can also use:
+            <security:intercept-url pattern="/**" access="permitAll"/>
+            Checkout more at SPEL homepage.
+        -->
+        <security:intercept-url pattern="/**" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER', 'ROLE_ADMIN')"/>
     </security:http>
 
     <security:authentication-manager>
