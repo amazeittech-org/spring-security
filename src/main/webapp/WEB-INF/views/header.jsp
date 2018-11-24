@@ -20,6 +20,8 @@
                     <li>
                         <p class="navbar-text">
                             Welcome <sec:authentication property="name"/>
+                            ( <sec:authentication property="principal.firstName" />
+                            <sec:authentication property="principal.lastName"/> )
                             <a href="javascript:document.getElementById('logout').submit()">Logout</a>
                         </p>
                     </li>

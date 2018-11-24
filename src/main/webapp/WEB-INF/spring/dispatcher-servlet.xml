@@ -12,7 +12,7 @@
 		<mvc:annotation-driven/>
 		<mvc:resources location="./resources/" mapping="/resources/**"/>
 		<context:component-scan base-package="com.skb.learn.spring.security"/>
-		
+
 		<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 			<property name="prefix" value="/WEB-INF/views/"/>
 			<property name="suffix" value=".jsp"/>
@@ -23,5 +23,5 @@
 
 		<!--Making it 'enabled' allows us to use Annotations on our Controllers that will allow us to require authorization
 		to invoke these methods.-->
-		<security:global-method-security pre-post-annotations="enabled" />
+		<security:global-method-security jsr250-annotations="enabled" pre-post-annotations="enabled" />
 </beans>

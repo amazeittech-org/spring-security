@@ -105,6 +105,10 @@ public class AutoUser implements UserDetails {
 		this.username = username;
 	}
 
+	public void setAutoUserId(Long autoUserId) {
+		this.autoUserId = autoUserId;
+	}
+
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
