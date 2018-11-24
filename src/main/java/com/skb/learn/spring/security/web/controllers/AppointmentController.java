@@ -69,7 +69,7 @@ public class AppointmentController {
 		otherUser.setEmail("malicioususer@email.com");
 		otherUser.setAutoUserId(100L);
 
-		return appointmentUtils.saveAll(new ArrayList<Appointment>())
+		return appointmentUtils.saveAll(new ArrayList<Appointment>());
 	}
 
 	@RequestMapping(value="/", method=RequestMethod.GET)
