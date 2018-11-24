@@ -6,7 +6,7 @@
 
     <groupId>com.skb.learn</groupId>
     <artifactId>spring-security</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>spring-security Maven Webapp</name>
