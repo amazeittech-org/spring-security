@@ -18,19 +18,28 @@
                              authentication-failure-url="/login?error=true"/>
         <security:logout logout-url="/logout" logout-success-url="/login?logout=true" delete-cookies="JSESSIONID"/>
         <!-- Since not we are using SPEL we can logical operators like or, and, etc -->
-        <security:intercept-url pattern="/appointments/*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')"/>
+        <security:intercept-url pattern="/appointments/*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')"
+                                requires-channel="https" />
         <!-- hasAuthority() is similar to hasRole(). Internally hasAuthority() delegates to hasRole() -->
         <!-- We can also use SPEL like (though it is not recommended):
             <security:intercept-url pattern="/schedule/*" access="principal.username == 'kbowersox'"/>
         -->
-        <security:intercept-url pattern="/services/*" access="hasAuthority('ROLE_ADMIN')"/>
-        <security:intercept-url pattern="/schedule/*" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"/>
+        <security:intercept-url pattern="/services/*" access="hasAuthority('ROLE_ADMIN')"
+                                requires-channel="https" />
+        <security:intercept-url pattern="/schedule/*" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"
+                                requires-channel="https" />
         <!-- To avoid putting lot of hasRole + or combination we can use hasAnyRole() -->
         <!-- In cases where we need to allow access to every one like home page, login page, contact us we can also use:
             <security:intercept-url pattern="/**" access="permitAll"/>
             Checkout more at SPEL homepage.
         -->
-        <security:intercept-url pattern="/**" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER', 'ROLE_ADMIN')"/>
+        <security:intercept-url pattern="/**" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER', 'ROLE_ADMIN')"
+                                requires-channel="https" />
+
+        <!--Configuration for Remember-me. Key attribute is used to identify the cookie that is used for remember-me-->
+        <security:remember-me key="rememberMe" />
+        <!-- To disable CSRF
+        <security:csrf disabled=”true”/> -->
     </security:http>
 
     <security:authentication-manager>
